@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}All Payments | EventPro{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>All payments</h1>
+        <p>Track every payment, mode and status.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="dash-card"><i class="bi bi-cash-stack"></i><h2>&#8377;{{ summary.paid }}</h2><p>Total paid</p></div>
+            </div>
+            <div class="col-md-4">
+                <div class="dash-card"><i class="bi bi-arrow-counterclockwise"></i><h2>&#8377;{{ summary.refunded }}</h2><p>Total refunded</p></div>
+            </div>
+            <div class="col-md-4">
+                <div class="dash-card"><i class="bi bi-receipt"></i><h2>{{ payments|length }}</h2><p>Transactions</p></div>
+            </div>
+        </div>
+
+        <form method="GET" action="{{ url_for('view_payments') }}" class="filter-box mb-4">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <select name="status" class="form-select">
+                        <option value="">All status</option>
+                        <option value="Paid" {% if selected_status == 'Paid' %}selected{% endif %}>Paid</option>
+                        <option value="Refunded" {% if selected_status == 'Refunded' %}selected{% endif %}>Refunded</option>
+                        <option value="Pending" {% if selected_status == 'Pending' %}selected{% endif %}>Pending</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select name="mode" class="form-select">
+                        <option value="">All modes</option>
+                        <option value="UPI" {% if selected_mode == 'UPI' %}selected{% endif %}>UPI</option>
+                        <option value="Card" {% if selected_mode == 'Card' %}selected{% endif %}>Card</option>
+                        <option value="Cash" {% if selected_mode == 'Cash' %}selected{% endif %}>Cash</option>
+                    </select>
+                </div>
+                <div class="col-md-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-brand w-100">Filter</button>
+                    <a href="{{ url_for('view_payments') }}" class="btn btn-outline-brand">Reset</a>
+                </div>
+            </div>
+        </form>
+
+        <div class="detail-box">
+            {% if payments %}
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead>
+                        <tr><th>Payment</th><th>Booking</th><th>User</th><th>Event</th><th>Mode</th><th>Date</th><th>Amount</th><th>Status</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for p in payments %}
+                        <tr>
+                            <td>#{{ p.Payment_ID }}</td>
+                            <td>#{{ p.Booking_ID }}</td>
+                            <td>{{ p.User_Name }}</td>
+                            <td>{{ p.Event_Name }}</td>
+                            <td>{{ p.Payment_Mode }}</td>
+                            <td>{{ p.Payment_Date }}</td>
+                            <td>&#8377;{{ p.Amount }}</td>
+                            <td><span class="badge-status status-{{ p.Payment_Status|lower }}">{{ p.Payment_Status }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted mb-0">No payments found.</p>
+            {% endif %}
+        </div>
+
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-brand">Back to dashboard</a>
+    </div>
+</section>
+
+{% endblock %}

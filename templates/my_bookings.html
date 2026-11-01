@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}My Bookings | EventPro{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>My bookings</h1>
+        <p>View, track and cancel your event bookings.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        {% if bookings %}
+        <div class="detail-box">
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>ID</th><th>Event</th><th>Event date</th><th>Event time</th><th>Hall</th>
+                            <th>Seats</th><th>Amount</th><th>Payment</th><th>Booking status</th><th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for b in bookings %}
+                        <tr>
+                            <td>#{{ b.Booking_ID }}</td>
+                            <td><a href="{{ url_for('event_detail', event_id=b.Event_ID) }}">{{ b.Event_Name }}</a></td>
+                            <td>{{ b.Actual_Event_Date }}</td>
+                            <td>{{ b.Event_Time or '-' }}</td>
+                            <td>{{ b.Hall_Name }}</td>
+                            <td>{{ b.Seats_Booked }}</td>
+                            <td>&#8377;{{ b.Total_Amt }}</td>
+                            <td>
+                                <span class="badge-status status-{{ (b.Payment_Status or 'pending')|lower }}">{{ b.Payment_Status or 'Pending' }}</span>
+                                <div class="small text-muted">{{ b.Payment_Mode }}</div>
+                            </td>
+                            <td><span class="badge-status status-{{ b.Status|lower }}">{{ b.Status }}</span></td>
+                            <td>
+                                {% if b.Status == 'Upcoming' %}
+                                <form method="POST" action="{{ url_for('cancel_booking', booking_id=b.Booking_ID) }}"
+                                      onsubmit="return confirm('Cancel this booking? Your payment will be marked as refunded.');">
+                                    <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+                                </form>
+                                {% elif b.Status == 'Completed' %}
+                                <a href="{{ url_for('feedback') }}?event_id={{ b.Event_ID }}" class="btn btn-sm btn-outline-brand">Give feedback</a>
+                                {% else %}
+                                <span class="text-muted small">-</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-ticket-perforated" style="font-size:3rem;color:#999;"></i>
+            <p class="text-muted mt-2">You have not booked any events yet.</p>
+            <a href="{{ url_for('events') }}" class="btn btn-brand">Browse events</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Services | EventPro{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Manage services</h1>
+        <p>Add and remove services offered with events.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="row g-4">
+
+            <div class="col-lg-4">
+                <form method="POST" action="{{ url_for('manage_services') }}" class="detail-box">
+                    <h4>Add service</h4>
+                    <div class="mb-3">
+                        <label class="form-label">Service name</label>
+                        <input type="text" name="service_name" class="form-control" maxlength="100" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Service type</label>
+                        <select name="service_type" class="form-select" required>
+                            <option value="">Select type</option>
+                            <option>Food</option>
+                            <option>Decoration</option>
+                            <option>Technical</option>
+                            <option>Media</option>
+                            <option>Facility</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Cost (&#8377;)</label>
+                        <input type="number" name="service_cost" class="form-control" min="0" step="0.01" value="0" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Free service?</label>
+                        <select name="is_free" class="form-select">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-brand w-100">Add service</button>
+                </form>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="detail-box">
+                    <h4>All services</h4>
+                    {% if services %}
+                    <div class="table-responsive">
+                        <table class="table table-striped align-middle">
+                            <thead><tr><th>ID</th><th>Name</th><th>Type</th><th>Cost</th><th>Free</th><th>Action</th></tr></thead>
+                            <tbody>
+                                {% for s in services %}
+                                <tr>
+                                    <td>#{{ s.Service_ID }}</td>
+                                    <td>{{ s.Service_Name }}</td>
+                                    <td>{{ s.Service_Type }}</td>
+                                    <td>&#8377;{{ s.Service_Cost }}</td>
+                                    <td>{{ s.Is_Free }}</td>
+                                    <td>
+                                        <form method="POST" action="{{ url_for('delete_service', service_id=s.Service_ID) }}"
+                                              onsubmit="return confirm('Delete this service?');">
+                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted mb-0">No services added yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

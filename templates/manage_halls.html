@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Halls | EventPro{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Manage halls</h1>
+        <p>Hall status changes to Booked automatically when a user books an event.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="row g-4">
+
+            <div class="col-lg-4">
+                <form method="POST" action="{{ url_for('manage_halls') }}" class="detail-box">
+                    <h4>Add hall</h4>
+                    <div class="mb-3">
+                        <label class="form-label">Hall name</label>
+                        <input type="text" name="hall_name" class="form-control" maxlength="50" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Location</label>
+                        <input type="text" name="location" class="form-control" maxlength="100" required>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label">Capacity</label>
+                            <input type="number" name="capacity" class="form-control" min="1" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Charges (&#8377;)</label>
+                            <input type="number" name="charges" class="form-control" min="0" step="0.01" required>
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label">Available from</label>
+                            <input type="date" name="available_from" class="form-control" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Available to</label>
+                            <input type="date" name="available_to" class="form-control" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-brand w-100">Add hall</button>
+                </form>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="detail-box">
+                    <h4>All halls</h4>
+                    {% if halls %}
+                    <div class="table-responsive">
+                        <table class="table table-striped align-middle">
+                            <thead>
+                                <tr><th>ID</th><th>Name</th><th>Location</th><th>Capacity</th><th>Charges</th><th>Available</th><th>Status</th><th>Action</th></tr>
+                            </thead>
+                            <tbody>
+                                {% for h in halls %}
+                                <tr>
+                                    <td>#{{ h.Hall_ID }}</td>
+                                    <td>{{ h.Hall_Name }}</td>
+                                    <td>{{ h.Location }}</td>
+                                    <td>{{ h.Capacity }}</td>
+                                    <td>&#8377;{{ h.Hall_Charges }}</td>
+                                    <td>{{ h.Available_From }} to {{ h.Available_To }}</td>
+                                    <td><span class="badge-status status-{{ h.Availability_Status|lower }}">{{ h.Availability_Status }}</span></td>
+                                    <td>
+                                        <form method="POST" action="{{ url_for('delete_hall', hall_id=h.Hall_ID) }}"
+                                              onsubmit="return confirm('Delete this hall?');">
+                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted mb-0">No halls added yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

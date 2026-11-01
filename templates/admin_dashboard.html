@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard | EventPro{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Admin dashboard</h1>
+        <p>Welcome, {{ session.get('name') }}. Manage the whole system from here.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+
+        <!-- Stats -->
+        <div class="row g-4 mb-4">
+            <div class="col-6 col-md-3">
+                <div class="dash-card"><i class="bi bi-calendar-event"></i><h2>{{ stats.events }}</h2><p>Events</p></div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="dash-card"><i class="bi bi-ticket-perforated"></i><h2>{{ stats.bookings }}</h2><p>Bookings</p></div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="dash-card"><i class="bi bi-people"></i><h2>{{ stats.users }}</h2><p>Users</p></div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="dash-card"><i class="bi bi-briefcase"></i><h2>{{ stats.organizers }}</h2><p>Organizers</p></div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="dash-card"><i class="bi bi-building"></i><h2>{{ stats.halls }}</h2><p>Halls</p></div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="dash-card"><i class="bi bi-gear"></i><h2>{{ stats.services }}</h2><p>Services</p></div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="dash-card"><i class="bi bi-currency-rupee"></i><h2>&#8377;{{ stats.revenue }}</h2><p>Total revenue</p></div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="dash-card"><i class="bi bi-star"></i><h2>{{ stats.rating }}/5</h2><p>Average rating</p></div>
+            </div>
+        </div>
+
+        <!-- Quick links -->
+        <div class="d-flex gap-2 flex-wrap mb-4">
+            <a href="{{ url_for('manage_events') }}" class="btn btn-brand">Manage events</a>
+            <a href="{{ url_for('manage_halls') }}" class="btn btn-outline-brand">Manage halls</a>
+            <a href="{{ url_for('manage_services') }}" class="btn btn-outline-brand">Manage services</a>
+            <a href="{{ url_for('view_bookings') }}" class="btn btn-outline-brand">View bookings</a>
+            <a href="{{ url_for('view_payments') }}" class="btn btn-outline-brand">View payments</a>
+            <a href="{{ url_for('view_feedback') }}" class="btn btn-outline-brand">View feedback</a>
+        </div>
+
+        <!-- Recent bookings -->
+        <div class="detail-box">
+            <h4>Recent bookings</h4>
+            {% if recent_bookings %}
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead><tr><th>ID</th><th>User</th><th>Event</th><th>Date</th><th>Seats</th><th>Amount</th></tr></thead>
+                    <tbody>
+                        {% for b in recent_bookings %}
+                        <tr>
+                            <td>#{{ b.Booking_ID }}</td>
+                            <td>{{ b.User_Name }}</td>
+                            <td>{{ b.Event_Name }}</td>
+                            <td>{{ b.Booking_Date }}</td>
+                            <td>{{ b.Seats_Booked }}</td>
+                            <td>&#8377;{{ b.Total_Amt }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted mb-0">No bookings yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- Recent feedback -->
+        <div class="detail-box">
+            <h4>Recent feedback</h4>
+            {% for f in recent_feedback %}
+            <div class="feedback-item">
+                <strong>{{ f.User_Name }}</strong> on <em>{{ f.Event_Name }}</em>
+                <span class="stars">{% for i in range(f.Rating) %}&#9733;{% endfor %}{% for i in range(5 - f.Rating) %}&#9734;{% endfor %}</span>
+                <p class="mb-0">{{ f.Comments }}</p>
+            </div>
+            {% else %}
+            <p class="text-muted mb-0">No feedback yet.</p>
+            {% endfor %}
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

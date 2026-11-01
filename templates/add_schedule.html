@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Add Schedule | EventPro{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Add schedule</h1>
+        <p>Add activities with start and end times for your event.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="row g-4">
+
+            <div class="col-lg-5">
+                <form method="POST" action="{{ url_for('add_schedule') }}" class="detail-box">
+                    <h4>New activity</h4>
+                    {% if events %}
+                    <div class="mb-3">
+                        <label class="form-label">Event</label>
+                        <select name="event_id" class="form-select" required>
+                            <option value="">Select event</option>
+                            {% for e in events %}
+                            <option value="{{ e.Event_ID }}">{{ e.Event_Name }} ({{ e.Actual_Event_Date }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Activity name</label>
+                        <input type="text" name="activity_name" class="form-control" maxlength="50" required>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label">Start time</label>
+                            <input type="time" name="start_time" class="form-control" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">End time</label>
+                            <input type="time" name="end_time" class="form-control" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-brand">Add activity</button>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-brand">Back</a>
+                    {% else %}
+                    <p class="text-muted mb-0">Create an event first. <a href="{{ url_for('create_event') }}">Create event</a></p>
+                    {% endif %}
+                </form>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="detail-box">
+                    <h4>Existing schedule</h4>
+                    {% if schedules %}
+                    <div class="table-responsive">
+                        <table class="table table-striped align-middle">
+                            <thead><tr><th>Event</th><th>Activity</th><th>Start</th><th>End</th><th></th></tr></thead>
+                            <tbody>
+                                {% for s in schedules %}
+                                <tr>
+                                    <td>{{ s.Event_Name }}</td>
+                                    <td>{{ s.Activity_Name }}</td>
+                                    <td>{{ s.Start_Time }}</td>
+                                    <td>{{ s.End_Time }}</td>
+                                    <td>
+                                        <form method="POST" action="{{ url_for('delete_schedule', schedule_id=s.Schedule_ID) }}"
+                                              onsubmit="return confirm('Delete this activity?');">
+                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted mb-0">No activities added yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

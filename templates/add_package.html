@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Add Package | EventPro{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Add package</h1>
+        <p>Create ticket packages with price per seat for your events.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="row g-4">
+
+            <div class="col-lg-5">
+                <form method="POST" action="{{ url_for('add_package') }}" class="detail-box">
+                    <h4>New package</h4>
+                    {% if events %}
+                    <div class="mb-3">
+                        <label class="form-label">Event</label>
+                        <select name="event_id" class="form-select" required>
+                            <option value="">Select event</option>
+                            {% for e in events %}
+                            <option value="{{ e.Event_ID }}">{{ e.Event_Name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Package name</label>
+                        <input type="text" name="package_name" class="form-control" maxlength="100" required>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label">Cost per seat (&#8377;)</label>
+                            <input type="number" name="package_cost" class="form-control" min="0" step="0.01" required>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Max attendees</label>
+                            <input type="number" name="max_attendees" class="form-control" min="1" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Includes free service?</label>
+                        <select name="free_service" class="form-select">
+                            <option value="No">No</option>
+                            <option value="Yes">Yes</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-brand">Add package</button>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-brand">Back</a>
+                    {% else %}
+                    <p class="text-muted mb-0">Create an event first. <a href="{{ url_for('create_event') }}">Create event</a></p>
+                    {% endif %}
+                </form>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="detail-box">
+                    <h4>Existing packages</h4>
+                    {% if packages %}
+                    <div class="table-responsive">
+                        <table class="table table-striped align-middle">
+                            <thead><tr><th>ID</th><th>Event</th><th>Package</th><th>Cost</th><th>Max</th><th>Free service</th></tr></thead>
+                            <tbody>
+                                {% for p in packages %}
+                                <tr>
+                                    <td>#{{ p.Package_ID }}</td>
+                                    <td>{{ p.Event_Name }}</td>
+                                    <td>{{ p.Package_Name }}</td>
+                                    <td>&#8377;{{ p.Package_Cost }}</td>
+                                    <td>{{ p.Max_Attendees }}</td>
+                                    <td>{{ p.Include_Free_Service }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-muted mb-0">No packages added yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

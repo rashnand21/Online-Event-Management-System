@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}EventPro | Online Event Management System{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<!-- Top utility bar -->
+<div class="top-bar">
+    <div class="container d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-calendar-event"></i> Plan, book and manage events in one place</span>
+        <div>
+            <a href="{{ url_for('events') }}">Find events</a>
+            {% if session.get('role') %}
+                <a href="{{ url_for('dashboard') }}">My dashboard</a>
+                <a href="{{ url_for('logout') }}">Log out</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Log in</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg main-nav sticky-top">
+    <div class="container">
+        <a class="navbar-brand brand" href="{{ url_for('index') }}">
+            <i class="bi bi-stars"></i> Event<span>Pro</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainMenu">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('events') }}">Events</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('about') }}">About</a></li>
+            </ul>
+            <div class="d-flex gap-2">
+                {% if session.get('role') %}
+                    <span class="navbar-text me-2">Hi, {{ session.get('name') }} ({{ session.get('role') }})</span>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-brand">Dashboard</a>
+                    <a href="{{ url_for('logout') }}" class="btn btn-outline-brand">Log out</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-brand">Log in</a>
+                    <a href="{{ url_for('register') }}" class="btn btn-brand">Get started</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Flash messages -->
+<div class="container mt-3">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category if category in ['success','danger','warning','info'] else 'info' }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endwith %}
+</div>
+
+<!-- Page content -->
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<!-- Footer -->
+<footer class="site-footer">
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-md-3">
+                <h5 class="brand text-white"><i class="bi bi-stars"></i> Event<span>Pro</span></h5>
+                <p>An online event management system for in-person events, bookings, halls and services.</p>
+            </div>
+            <div class="col-6 col-md-2">
+                <h6>Explore</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('events') }}">Events</a></li>
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+                </ul>
+            </div>
+            <div class="col-6 col-md-2">
+                <h6>Account</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{{ url_for('login') }}">Log in</a></li>
+                    <li><a href="{{ url_for('register') }}">Register</a></li>
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                </ul>
+            </div>
+            <div class="col-6 col-md-2">
+                <h6>For</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{{ url_for('login') }}">Users</a></li>
+                    <li><a href="{{ url_for('login') }}">Organizers</a></li>
+                    <li><a href="{{ url_for('login') }}">Admin</a></li>
+                </ul>
+            </div>
+            <div class="col-6 col-md-3">
+                <h6>Contact</h6>
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-geo-alt"></i> Nashik, Maharashtra</li>
+                    <li><i class="bi bi-envelope"></i> support@eventpro.com</li>
+                    <li><i class="bi bi-telephone"></i> +91 98765 00001</li>
+                </ul>
+            </div>
+        </div>
+        <hr>
+        <p class="text-center mb-0">&copy; 2026 EventPro. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

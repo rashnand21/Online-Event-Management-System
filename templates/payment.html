@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Booking Confirmed | EventPro{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Booking confirmed</h1>
+        <p>Your payment was received. Keep this receipt for your records.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <div class="detail-box text-center">
+                    <i class="bi bi-check-circle-fill" style="font-size:4rem;color:#1a9e5c;"></i>
+                    <h3 class="mt-2">Thank you, {{ receipt.User_Name }}!</h3>
+                    <p class="text-muted mb-0">Your booking <strong>#{{ receipt.Booking_ID }}</strong> is confirmed.</p>
+                </div>
+
+                <div class="detail-box" id="receipt">
+                    <h4>Receipt</h4>
+                    <div class="row">
+                        <div class="col-md-6"><p><strong>Booking ID:</strong> #{{ receipt.Booking_ID }}</p></div>
+                        <div class="col-md-6"><p><strong>Booking date:</strong> {{ receipt.Booking_Date }}</p></div>
+                        <div class="col-md-6"><p><strong>Event:</strong> {{ receipt.Event_Name }}</p></div>
+                        <div class="col-md-6"><p><strong>Event date:</strong> {{ receipt.Actual_Event_Date }}</p></div>
+                        <div class="col-md-6"><p><strong>Location:</strong> {{ receipt.Location }}</p></div>
+                        <div class="col-md-6"><p><strong>Hall:</strong> {{ receipt.Hall_Name }}</p></div>
+                        <div class="col-md-6"><p><strong>Seats booked:</strong> {{ receipt.Seats_Booked }}</p></div>
+                        <div class="col-md-6"><p><strong>Payment mode:</strong> {{ receipt.Payment_Mode }}</p></div>
+                        <div class="col-md-6"><p><strong>Payment ID:</strong> #{{ receipt.Payment_ID }}</p></div>
+                        <div class="col-md-6"><p><strong>Payment status:</strong>
+                            <span class="badge-status status-{{ receipt.Payment_Status|lower }}">{{ receipt.Payment_Status }}</span></p></div>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Total paid</h5>
+                        <h3 class="mb-0">&#8377;{{ receipt.Amount }}</h3>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2 flex-wrap">
+                    <button onclick="window.print()" class="btn btn-brand"><i class="bi bi-printer"></i> Print receipt</button>
+                    <a href="{{ url_for('my_bookings') }}" class="btn btn-outline-brand">My bookings</a>
+                    <a href="{{ url_for('events') }}" class="btn btn-outline-brand">Browse more events</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

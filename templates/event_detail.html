@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}{{ event.Event_Name }} | EventPro{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <span class="badge-type">{{ event.Event_Type }}</span>
+        <h1 class="mt-2">{{ event.Event_Name }}</h1>
+        <p><i class="bi bi-geo-alt"></i> {{ event.Location }} &nbsp;|&nbsp; <i class="bi bi-calendar3"></i> {{ event.Actual_Event_Date }} &nbsp;|&nbsp; <i class="bi bi-clock"></i> {{ event.Event_Time or 'Time to be announced' }}</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="row g-4">
+
+            <!-- Left side -->
+            <div class="col-lg-8">
+
+                <div class="detail-box">
+                    <h4>Event information</h4>
+                    <div class="row">
+                        <div class="col-md-6"><p><strong>Organizer:</strong> {{ event.Organizer_Name }}</p></div>
+                        <div class="col-md-6"><p><strong>Organization:</strong> {{ event.Organization_Name }}</p></div>
+                        <div class="col-md-6"><p><strong>Event date:</strong> {{ event.Actual_Event_Date }}</p></div>
+                        <div class="col-md-6"><p><strong>Event time:</strong> {{ event.Event_Time or 'To be announced' }}</p></div>
+                        <div class="col-md-6"><p><strong>Book before:</strong> {{ event.Booking_Before_Date }}</p></div>
+                        <div class="col-md-6"><p><strong>Total capacity:</strong> {{ event.Max_Capacity }}</p></div>
+                        <div class="col-md-6"><p><strong>Booking:</strong> {% if already_booked %}Already booked{% else %}Open{% endif %}</p></div>
+                        <div class="col-md-6"><p><strong>Status:</strong> {{ event.Status }}</p></div>
+                    </div>
+                </div>
+
+                <div class="detail-box">
+                    <h4>Schedule</h4>
+                    {% if schedule %}
+                    <table class="table table-striped align-middle">
+                        <thead><tr><th>Activity</th><th>Start</th><th>End</th></tr></thead>
+                        <tbody>
+                            {% for s in schedule %}
+                            <tr><td>{{ s.Activity_Name }}</td><td>{{ s.Start_Time }}</td><td>{{ s.End_Time }}</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="text-muted">Schedule will be announced soon.</p>
+                    {% endif %}
+                </div>
+
+                <div class="detail-box">
+                    <h4>Packages</h4>
+                    <div class="row g-3">
+                        {% for p in packages %}
+                        <div class="col-md-6">
+                            <div class="package-card">
+                                <h5>{{ p.Package_Name }}</h5>
+                                <h3>&#8377;{{ p.Package_Cost }}<small> / seat</small></h3>
+                                <p class="mb-1"><i class="bi bi-people"></i> Up to {{ p.Max_Attendees }} attendees</p>
+                                <p class="mb-0"><i class="bi bi-gift"></i> Free service: {{ p.Include_Free_Service }}</p>
+                            </div>
+                        </div>
+                        {% else %}
+                        <p class="text-muted">No packages added yet.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="detail-box">
+                    <h4>Offers</h4>
+                    {% for o in offers %}
+                    <div class="offer-card">
+                        <strong>{{ o.Offer_Code }}</strong> &mdash; {{ o.Discount_Per }}% off
+                        <span class="text-muted small">(valid {{ o.Valid_From }} to {{ o.Valid_To }})</span>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">No offers right now.</p>
+                    {% endfor %}
+                </div>
+
+                <div class="detail-box">
+                    <h4>Feedback</h4>
+                    {% for f in feedbacks %}
+                    <div class="feedback-item">
+                        <strong>{{ f.User_Name }}</strong>
+                        <span class="stars">{% for i in range(f.Rating) %}&#9733;{% endfor %}{% for i in range(5 - f.Rating) %}&#9734;{% endfor %}</span>
+                        <p class="mb-0">{{ f.Comments }}</p>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">No feedback yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Right side: booking box -->
+            <div class="col-lg-4">
+                <div class="book-box">
+                    <h4>Book this event</h4>
+                    <p class="text-muted">Maximum seats: <strong>{{ event.Max_Capacity }}</strong></p>
+                    {% if event.Status != 'Upcoming' %}
+                        <button class="btn btn-secondary w-100" disabled>Booking closed</button>
+                    {% elif already_booked %}
+                        <button class="btn btn-secondary w-100" disabled>Already booked</button>
+                        <p class="small text-muted mt-2 mb-0">Only one user can book an event.</p>
+                    {% elif session.get('role') == 'user' %}
+                        <a href="{{ url_for('book_event', event_id=event.Event_ID) }}" class="btn btn-brand w-100 btn-lg">Book now</a>
+                    {% elif session.get('role') %}
+                        <p class="text-danger small mb-0">Only users can book events. Log in with a user account.</p>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="btn btn-brand w-100 btn-lg">Log in to book</a>
+                        <p class="small text-center mt-2 mb-0">New here? <a href="{{ url_for('register') }}">Register</a></p>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Feedback | EventPro{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Event feedback</h1>
+        <p>Tell us about the events you attended.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="row g-4">
+
+            <div class="col-lg-6">
+                <div class="detail-box">
+                    <h4>Give feedback</h4>
+                    {% if events %}
+                    <form method="POST" action="{{ url_for('feedback') }}">
+                        <div class="mb-3">
+                            <label class="form-label">Event</label>
+                            <select name="event_id" class="form-select" required>
+                                <option value="">Select an event</option>
+                                {% for e in events %}
+                                <option value="{{ e.Event_ID }}" {% if selected_event == e.Event_ID %}selected{% endif %}>{{ e.Event_Name }} ({{ e.Actual_Event_Date }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Rating</label>
+                            <select name="rating" class="form-select" required>
+                                <option value="5">5 - Excellent</option>
+                                <option value="4">4 - Very good</option>
+                                <option value="3">3 - Good</option>
+                                <option value="2">2 - Fair</option>
+                                <option value="1">1 - Poor</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Comments</label>
+                            <textarea name="comments" class="form-control" rows="4" maxlength="500" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-brand">Submit feedback</button>
+                    </form>
+                    {% else %}
+                    <p class="text-muted mb-0">You can give feedback after you book and attend an event. Completed events you booked will appear here.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="detail-box">
+                    <h4>My previous feedback</h4>
+                    {% for f in my_feedbacks %}
+                    <div class="feedback-item">
+                        <strong>{{ f.Event_Name }}</strong>
+                        <span class="stars">{% for i in range(f.Rating) %}&#9733;{% endfor %}{% for i in range(5 - f.Rating) %}&#9734;{% endfor %}</span>
+                        <p class="mb-0">{{ f.Comments }}</p>
+                    </div>
+                    {% else %}
+                    <p class="text-muted mb-0">You have not submitted any feedback yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

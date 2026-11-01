@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Organizer Dashboard | EventPro{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Welcome, {{ session.get('name') }}</h1>
+        <p>Create events and manage schedules, packages, offers and staff.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+
+        <!-- Stats -->
+        <div class="row g-4 mb-4">
+            <div class="col-6 col-md-3">
+                <div class="dash-card"><i class="bi bi-calendar-event"></i><h2>{{ stats.total_events }}</h2><p>My events</p></div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="dash-card"><i class="bi bi-ticket-perforated"></i><h2>{{ stats.total_bookings }}</h2><p>Bookings received</p></div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="dash-card"><i class="bi bi-currency-rupee"></i><h2>&#8377;{{ stats.revenue }}</h2><p>Revenue</p></div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="dash-card"><i class="bi bi-people"></i><h2>{{ stats.total_staff }}</h2><p>Staff members</p></div>
+            </div>
+        </div>
+
+        <!-- Quick actions -->
+        <div class="d-flex gap-2 flex-wrap mb-4">
+            <a href="{{ url_for('create_event') }}" class="btn btn-brand"><i class="bi bi-plus-circle"></i> Create event</a>
+            <a href="{{ url_for('add_schedule') }}" class="btn btn-outline-brand">Add schedule</a>
+            <a href="{{ url_for('add_package') }}" class="btn btn-outline-brand">Add package</a>
+            <a href="{{ url_for('add_offer') }}" class="btn btn-outline-brand">Add offer</a>
+            <a href="{{ url_for('add_staff') }}" class="btn btn-outline-brand">Add staff</a>
+        </div>
+
+        <!-- My events -->
+        <div class="detail-box">
+            <h4>My events</h4>
+            {% if events %}
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead>
+                        <tr><th>ID</th><th>Event</th><th>Type</th><th>Location</th><th>Event date</th><th>Time</th><th>Capacity</th><th>Booked</th><th>Status</th><th>Action</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for e in events %}
+                        <tr>
+                            <td>#{{ e.Event_ID }}</td>
+                            <td><a href="{{ url_for('event_detail', event_id=e.Event_ID) }}">{{ e.Event_Name }}</a></td>
+                            <td>{{ e.Event_Type }}</td>
+                            <td>{{ e.Location }}</td>
+                            <td>{{ e.Actual_Event_Date }}</td>
+                            <td>{{ e.Event_Time or '-' }}</td>
+                            <td>{{ e.Max_Capacity }}</td>
+                            <td>{{ e.Booked_Seats }}</td>
+                            <td><span class="badge-status status-{{ e.Status|lower }}">{{ e.Status }}</span></td>
+                            <td>
+                                {% if e.Status == 'Upcoming' %}
+                                <form method="POST" action="{{ url_for('organizer_cancel_event', event_id=e.Event_ID) }}"
+                                      onsubmit="return confirm('Cancel this event?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+                                </form>
+                                {% else %}
+                                <span class="text-muted small">-</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted mb-0">You have not created any events yet. <a href="{{ url_for('create_event') }}">Create your first event</a>.</p>
+            {% endif %}
+        </div>
+
+        <!-- Bookings -->
+        <div class="detail-box">
+            <h4>Bookings for my events</h4>
+            {% if bookings %}
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead>
+                        <tr><th>Booking</th><th>Event</th><th>Booked by</th><th>Phone</th><th>Booked on</th><th>Event date</th><th>Event time</th><th>Seats</th><th>Amount</th><th>Payment</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for b in bookings %}
+                        <tr>
+                            <td>#{{ b.Booking_ID }}</td>
+                            <td>{{ b.Event_Name }}</td>
+                            <td>{{ b.User_Name }}</td>
+                            <td>{{ b.Phone_No }}</td>
+                            <td>{{ b.Booking_Date }}</td>
+                            <td>{{ b.Actual_Event_Date }}</td>
+                            <td>{{ b.Event_Time or '-' }}</td>
+                            <td>{{ b.Seats_Booked }}</td>
+                            <td>&#8377;{{ b.Total_Amt }}</td>
+                            <td><span class="badge-status status-{{ (b.Payment_Status or 'pending')|lower }}">{{ b.Payment_Status or 'Pending' }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted mb-0">No bookings yet.</p>
+            {% endif %}
+        </div>
+
+        <!-- Staff -->
+        <div class="detail-box">
+            <h4>My staff</h4>
+            {% if staff %}
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead><tr><th>ID</th><th>Name</th><th>Role</th><th>Contact</th><th>Availability</th><th>Event</th></tr></thead>
+                    <tbody>
+                        {% for s in staff %}
+                        <tr>
+                            <td>#{{ s.Staff_ID }}</td>
+                            <td>{{ s.Staff_Name }}</td>
+                            <td>{{ s.Role }}</td>
+                            <td>{{ s.Contact_No }}</td>
+                            <td>{{ s.Availability_Status }}</td>
+                            <td>{{ s.Event_Name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted mb-0">No staff added yet.</p>
+            {% endif %}
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

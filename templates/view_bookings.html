@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}All Bookings | EventPro{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>All bookings</h1>
+        <p>Who booked which event, when, and the event date and time.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+
+        <form method="GET" action="{{ url_for('view_bookings') }}" class="filter-box mb-4">
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <input type="text" name="q" class="form-control" placeholder="Search by user name or event name" value="{{ q or '' }}">
+                </div>
+                <div class="col-md-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-brand w-100">Search</button>
+                    <a href="{{ url_for('view_bookings') }}" class="btn btn-outline-brand">Reset</a>
+                </div>
+            </div>
+        </form>
+
+        <div class="detail-box">
+            <p class="text-muted">{{ bookings|length }} booking(s) | Total: <strong>&#8377;{{ total_amount }}</strong></p>
+            {% if bookings %}
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead>
+                        <tr><th>ID</th><th>Booked by</th><th>Phone</th><th>Booked on</th><th>Event</th><th>Event date</th><th>Event time</th><th>Hall</th><th>Seats</th><th>Amount</th><th>Payment</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for b in bookings %}
+                        <tr>
+                            <td>#{{ b.Booking_ID }}</td>
+                            <td>{{ b.User_Name }}</td>
+                            <td>{{ b.Phone_No }}</td>
+                            <td>{{ b.Booking_Date }}</td>
+                            <td>{{ b.Event_Name }}</td>
+                            <td>{{ b.Actual_Event_Date }}</td>
+                            <td>{{ b.Event_Time or '-' }}</td>
+                            <td>{{ b.Hall_Name }}</td>
+                            <td>{{ b.Seats_Booked }}</td>
+                            <td>&#8377;{{ b.Total_Amt }}</td>
+                            <td><span class="badge-status status-{{ (b.Payment_Status or 'pending')|lower }}">{{ b.Payment_Status or 'Pending' }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted mb-0">No bookings found.</p>
+            {% endif %}
+        </div>
+
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-brand">Back to dashboard</a>
+    </div>
+</section>
+
+{% endblock %}

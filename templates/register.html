@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Register | EventPro{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="auth-card">
+
+                    <h3 class="text-center">Create your account</h3>
+                    <p class="text-center text-muted">
+                        Register for EventPro
+                    </p>
+
+                    <form method="POST" action="{{ url_for('register') }}">
+
+                        <div class="mb-3">
+                            <label class="form-label">Register As</label>
+                            <select name="role" id="role" class="form-control" required>
+                                <option value="user">User</option>
+                                <option value="organizer">Organizer</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="name" class="form-control" maxlength="50" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Phone Number</label>
+                            <input type="text" name="phone" class="form-control" pattern="[0-9]{10}" maxlength="10"
+                                placeholder="10 digit number" required>
+                        </div>
+
+                        <div id="userFields">
+                            <div class="mb-3">
+                                <label class="form-label">Address</label>
+                                <input type="text" name="address" class="form-control" maxlength="255">
+                            </div>
+                        </div>
+
+                        <div id="organizerFields" style="display:none;">
+
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email" id="email" class="form-control">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Organization Name</label>
+                                <input type="text" name="organization" id="organization" class="form-control">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Experience (Years)</label>
+                                <input type="number" name="experience" class="form-control" min="0" step="0.5"
+                                    value="0">
+                            </div>
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Password (max 8 characters)</label>
+                            <input type="password" name="password" class="form-control" maxlength="8" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-brand w-100 btn-lg">
+                            Register
+                        </button>
+
+                    </form>
+
+                    <p class="text-center mt-3 mb-1">
+                        Already registered?
+                        <a href="{{ url_for('login') }}">Log in</a>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    const roleSelect = document.getElementById("role");
+    const userFields = document.getElementById("userFields");
+    const organizerFields = document.getElementById("organizerFields");
+
+    const email = document.getElementById("email");
+    const organization = document.getElementById("organization");
+
+    function updateFields() {
+        if (roleSelect.value === "organizer") {
+            userFields.style.display = "none";
+            organizerFields.style.display = "block";
+
+            email.required = true;
+            organization.required = true;
+        } else {
+            userFields.style.display = "block";
+            organizerFields.style.display = "none";
+
+            email.required = false;
+            organization.required = false;
+        }
+    }
+
+    roleSelect.addEventListener("change", updateFields);
+    updateFields();
+</script>
+
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Events | EventPro{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Find events</h1>
+        <p>Search and book your seat in upcoming events.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+
+        <!-- Search and filter -->
+        <form method="GET" action="{{ url_for('events') }}" class="filter-box mb-4">
+            <div class="row g-3">
+                <div class="col-md-5">
+                    <input type="text" name="q" class="form-control" placeholder="Search by event name or location" value="{{ q or '' }}">
+                </div>
+                <div class="col-md-3">
+                    <select name="type" class="form-select">
+                        <option value="">All types</option>
+                        {% for t in event_types %}
+                        <option value="{{ t }}" {% if t == selected_type %}selected{% endif %}>{{ t }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="status" class="form-select">
+                        <option value="">All status</option>
+                        <option value="Upcoming" {% if selected_status == 'Upcoming' %}selected{% endif %}>Upcoming</option>
+                        <option value="Completed" {% if selected_status == 'Completed' %}selected{% endif %}>Completed</option>
+                        <option value="Cancelled" {% if selected_status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex gap-2">
+                    <button type="submit" class="btn btn-brand w-100">Search</button>
+                    <a href="{{ url_for('events') }}" class="btn btn-outline-brand">Reset</a>
+                </div>
+            </div>
+        </form>
+
+        <p class="text-muted">{{ events|length }} event(s) found</p>
+
+        <div class="row g-4">
+            {% for e in events %}
+            <div class="col-md-6 col-lg-4">
+                <div class="event-card">
+                    <div class="event-top">
+                        <span class="badge-type">{{ e.Event_Type }}</span>
+                        <span class="badge-status status-{{ e.Status|lower }}">{{ e.Status }}</span>
+                    </div>
+                    <div class="event-body">
+                        <h5>{{ e.Event_Name }}</h5>
+                        <p><i class="bi bi-geo-alt"></i> {{ e.Location }}</p>
+                        <p><i class="bi bi-calendar3"></i> {{ e.Actual_Event_Date }}</p>
+                        <p><i class="bi bi-people"></i> Capacity: {{ e.Max_Capacity }}</p>
+                        <p class="small text-muted">Book before {{ e.Booking_Before_Date }}</p>
+                        <a href="{{ url_for('event_detail', event_id=e.Event_ID) }}" class="btn btn-brand w-100">View details</a>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-calendar-x" style="font-size:3rem;color:#999;"></i>
+                <p class="text-muted mt-2">No events match your search.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

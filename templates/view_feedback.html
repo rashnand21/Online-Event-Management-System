@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}All Feedback | EventPro{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>All feedback</h1>
+        <p>Ratings and comments given by users.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <div class="dash-card"><i class="bi bi-star-fill"></i><h2>{{ avg_rating }}/5</h2><p>Overall average rating</p></div>
+            </div>
+            <div class="col-md-6">
+                <div class="dash-card"><i class="bi bi-chat-dots"></i><h2>{{ feedbacks|length }}</h2><p>Total feedback</p></div>
+            </div>
+        </div>
+
+        <form method="GET" action="{{ url_for('view_feedback') }}" class="filter-box mb-4">
+            <div class="row g-3">
+                <div class="col-md-5">
+                    <select name="event_id" class="form-select">
+                        <option value="">All events</option>
+                        {% for e in events %}
+                        <option value="{{ e.Event_ID }}" {% if selected_event == e.Event_ID %}selected{% endif %}>{{ e.Event_Name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select name="rating" class="form-select">
+                        <option value="">All ratings</option>
+                        {% for r in [5,4,3,2,1] %}
+                        <option value="{{ r }}" {% if selected_rating == r %}selected{% endif %}>{{ r }} star{{ 's' if r > 1 }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-brand w-100">Filter</button>
+                    <a href="{{ url_for('view_feedback') }}" class="btn btn-outline-brand">Reset</a>
+                </div>
+            </div>
+        </form>
+
+        <div class="detail-box">
+            {% if feedbacks %}
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead><tr><th>ID</th><th>User</th><th>Event</th><th>Rating</th><th>Comments</th></tr></thead>
+                    <tbody>
+                        {% for f in feedbacks %}
+                        <tr>
+                            <td>#{{ f.Feedback_ID }}</td>
+                            <td>{{ f.User_Name }}</td>
+                            <td>{{ f.Event_Name }}</td>
+                            <td><span class="stars">{% for i in range(f.Rating) %}&#9733;{% endfor %}{% for i in range(5 - f.Rating) %}&#9734;{% endfor %}</span></td>
+                            <td>{{ f.Comments }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted mb-0">No feedback found.</p>
+            {% endif %}
+        </div>
+
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-brand">Back to dashboard</a>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}About | EventPro{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>About EventPro</h1>
+        <p>An online event management system built to make event planning and booking simple.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="row align-items-center gy-4">
+            <div class="col-lg-6">
+                <h2 class="section-title">What is EventPro?</h2>
+                <p>EventPro is a web-based event management system. Organizers create events, schedules, packages and offers. Users browse events, book seats, choose halls and pay online. Admins manage halls, services, payments and feedback from one place.</p>
+                <p>The goal is to replace manual processes with a simple, fast and reliable platform for in-person events of any size.</p>
+            </div>
+            <div class="col-lg-6">
+                <div class="feature-card">
+                    <h5>Our mission</h5>
+                    <p>To save time and money for organizers, increase attendance, and give every attendee a smooth booking experience.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section bg-soft">
+    <div class="container">
+        <h2 class="section-title">Key features</h2>
+        <div class="row g-4 mt-1">
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card"><i class="bi bi-calendar-check"></i><h5>Event management</h5><p>Create events with dates, locations, capacity and booking deadlines.</p></div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card"><i class="bi bi-ticket-perforated"></i><h5>Packages and offers</h5><p>Offer packages and discount codes for each event.</p></div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card"><i class="bi bi-building"></i><h5>Hall and slot booking</h5><p>Choose from available halls and reserve time slots.</p></div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card"><i class="bi bi-credit-card"></i><h5>Online payments</h5><p>Pay by UPI, card or cash and track every payment.</p></div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card"><i class="bi bi-people"></i><h5>Staff and schedule</h5><p>Assign staff and publish a clear activity schedule.</p></div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="feature-card"><i class="bi bi-star"></i><h5>Feedback and ratings</h5><p>Collect ratings and comments after every event.</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2 class="section-title">Who uses EventPro?</h2>
+        <div class="row g-4 mt-1">
+            <div class="col-md-4">
+                <div class="story-card"><h5><i class="bi bi-person"></i> Users</h5><p>Browse events, view schedules, book seats, pay, cancel bookings and give feedback.</p></div>
+            </div>
+            <div class="col-md-4">
+                <div class="story-card"><h5><i class="bi bi-briefcase"></i> Organizers</h5><p>Create events, add schedules, packages, offers and staff, and track bookings.</p></div>
+            </div>
+            <div class="col-md-4">
+                <div class="story-card"><h5><i class="bi bi-shield-lock"></i> Admins</h5><p>Manage halls, services, events, payments and feedback across the system.</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section bg-soft">
+    <div class="container">
+        <h2 class="section-title">Technology used</h2>
+        <div class="row g-4 text-center mt-1">
+            <div class="col-6 col-md-3"><div class="service-card"><h6>Python Flask</h6><p class="mb-0 text-muted">Backend</p></div></div>
+            <div class="col-6 col-md-3"><div class="service-card"><h6>MySQL</h6><p class="mb-0 text-muted">Database</p></div></div>
+            <div class="col-6 col-md-3"><div class="service-card"><h6>HTML, CSS, JS</h6><p class="mb-0 text-muted">Frontend</p></div></div>
+            <div class="col-6 col-md-3"><div class="service-card"><h6>Bootstrap 5</h6><p class="mb-0 text-muted">Design</p></div></div>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <div class="container text-center">
+        <h2>Start using EventPro today</h2>
+        <p>Create an account and book or organize your first event.</p>
+        <a href="{{ url_for('register') }}" class="btn btn-light btn-lg">Create account</a>
+    </div>
+</section>
+
+{% endblock %}

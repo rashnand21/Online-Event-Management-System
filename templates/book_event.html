@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %}Book {{ event.Event_Name }} | EventPro{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Book: {{ event.Event_Name }}</h1>
+        <p><i class="bi bi-geo-alt"></i> {{ event.Location }} &nbsp;|&nbsp; <i class="bi bi-calendar3"></i> {{ event.Actual_Event_Date }}</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="row g-4">
+
+            <div class="col-lg-8">
+                <form method="POST" action="{{ url_for('book_event', event_id=event.Event_ID) }}" class="detail-box">
+                    <h4>Booking details</h4>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Package</label>
+                            <select name="package_id" id="packageSelect" class="form-select" required>
+                                <option value="" data-cost="0">Select a package</option>
+                                {% for p in packages %}
+                                <option value="{{ p.Package_ID }}" data-cost="{{ p.Package_Cost }}" data-max="{{ p.Max_Attendees }}">
+                                    {{ p.Package_Name }} - &#8377;{{ p.Package_Cost }} / seat
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Number of seats (left: {{ seats_left }})</label>
+                            <input type="number" name="seats" id="seatsInput" class="form-control" min="1" max="{{ seats_left }}" value="1" required>
+                            <div class="form-text" id="maxHint"></div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Hall</label>
+                            <select name="hall_id" class="form-select" required>
+                                <option value="">Select a hall</option>
+                                {% for h in halls %}
+                                <option value="{{ h.Hall_ID }}">
+                                    {{ h.Hall_Name }} - {{ h.Location }} (capacity {{ h.Capacity }}, &#8377;{{ h.Hall_Charges }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Offer code (optional)</label>
+                            <input type="text" name="offer_code" class="form-control" placeholder="e.g. TECH10">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Payment mode</label>
+                            <select name="payment_mode" class="form-select" required>
+                                <option value="UPI">UPI</option>
+                                <option value="Card">Card</option>
+                                <option value="Cash">Cash</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <h5 class="mb-0">Estimated total: <span id="totalAmt">&#8377;0</span></h5>
+                        <button type="submit" class="btn btn-brand btn-lg">Confirm and pay</button>
+                    </div>
+                    <p class="small text-muted mt-2 mb-0">The final amount is calculated after your offer code is checked.</p>
+                </form>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="book-box">
+                    <h5>Available offers</h5>
+                    {% for o in offers %}
+                    <div class="offer-card">
+                        <strong>{{ o.Offer_Code }}</strong> - {{ o.Discount_Per }}% off
+                        <div class="small text-muted">Valid till {{ o.Valid_To }}</div>
+                    </div>
+                    {% else %}
+                    <p class="text-muted mb-0">No offers right now.</p>
+                    {% endfor %}
+                    <hr>
+                    <p class="mb-1"><strong>Book before:</strong> {{ event.Booking_Before_Date }}</p>
+                    <p class="mb-0"><strong>Seats left:</strong> {{ seats_left }}</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const pkg = document.getElementById('packageSelect');
+    const seats = document.getElementById('seatsInput');
+    const total = document.getElementById('totalAmt');
+    const hint = document.getElementById('maxHint');
+
+    function update() {
+        const opt = pkg.options[pkg.selectedIndex];
+        const cost = parseFloat(opt.dataset.cost || 0);
+        const max = opt.dataset.max;
+        const n = parseInt(seats.value || 0);
+        total.textContent = '\u20B9' + (cost * n).toFixed(2);
+        hint.textContent = max ? 'This package allows up to ' + max + ' attendees per booking.' : '';
+    }
+    pkg.addEventListener('change', update);
+    seats.addEventListener('input', update);
+    update();
+</script>
+{% endblock %}

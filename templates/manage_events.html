@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Events | EventPro{% endblock %}
+
+{% block content %}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Manage events</h1>
+        <p>View every event on the platform and cancel events if needed.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+
+        <form method="GET" action="{{ url_for('manage_events') }}" class="filter-box mb-4">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <input type="text" name="q" class="form-control" placeholder="Search by event name, location or organizer" value="{{ q or '' }}">
+                </div>
+                <div class="col-md-3">
+                    <select name="status" class="form-select">
+                        <option value="">All status</option>
+                        <option value="Upcoming" {% if selected_status == 'Upcoming' %}selected{% endif %}>Upcoming</option>
+                        <option value="Completed" {% if selected_status == 'Completed' %}selected{% endif %}>Completed</option>
+                        <option value="Cancelled" {% if selected_status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                    </select>
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                    <button type="submit" class="btn btn-brand w-100">Search</button>
+                    <a href="{{ url_for('manage_events') }}" class="btn btn-outline-brand">Reset</a>
+                </div>
+            </div>
+        </form>
+
+        <div class="detail-box">
+            <p class="text-muted">{{ events|length }} event(s) found</p>
+            {% if events %}
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>ID</th><th>Event</th><th>Type</th><th>Location</th><th>Organizer</th>
+                            <th>Event date</th><th>Capacity</th><th>Booked</th><th>Status</th><th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for e in events %}
+                        <tr>
+                            <td>#{{ e.Event_ID }}</td>
+                            <td><a href="{{ url_for('event_detail', event_id=e.Event_ID) }}">{{ e.Event_Name }}</a></td>
+                            <td>{{ e.Event_Type }}</td>
+                            <td>{{ e.Location }}</td>
+                            <td>{{ e.Organizer_Name }}</td>
+                            <td>{{ e.Actual_Event_Date }}</td>
+                            <td>{{ e.Max_Capacity }}</td>
+                            <td>{{ e.Booked_Seats }}</td>
+                            <td><span class="badge-status status-{{ e.Status|lower }}">{{ e.Status }}</span></td>
+                            <td class="d-flex gap-1">
+                                {% if e.Status == 'Upcoming' %}
+                                <form method="POST" action="{{ url_for('admin_complete_event', event_id=e.Event_ID) }}"
+                                      onsubmit="return confirm('Mark this event as completed?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-brand">Complete</button>
+                                </form>
+                                <form method="POST" action="{{ url_for('admin_cancel_event', event_id=e.Event_ID) }}"
+                                      onsubmit="return confirm('Cancel this event?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+                                </form>
+                                {% else %}
+                                <span class="text-muted small">-</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted mb-0">No events found.</p>
+            {% endif %}
+        </div>
+
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-brand">Back to dashboard</a>
+    </div>
+</section>
+
+{% endblock %}
