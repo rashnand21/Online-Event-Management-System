@@ -1,215 +1,357 @@
 {% extends "base.html" %}
 
-{% block title %}EventPro | Online Event Management System{% endblock %}
+{% block title %}EventPro | Make Every Moment Count{% endblock %}
 
 {% block content %}
 
-<!-- HERO -->
-<section class="hero">
-    <div class="container">
-        <div class="row align-items-center gy-4">
-            <div class="col-lg-7">
-                <p class="eyebrow">EVENT MANAGEMENT SYSTEM</p>
-                <h1>An event platform for in-person experiences</h1>
-                <p class="lead">Are you using manual processes to plan and manage events? Automate bookings, halls, packages and payments so you can focus on what matters most: your attendees.</p>
-                <div class="d-flex gap-3 flex-wrap">
-                    <a href="{{ url_for('events') }}" class="btn btn-brand btn-lg">Browse events</a>
-                    <a href="{{ url_for('register') }}" class="btn btn-outline-brand btn-lg">Create free account</a>
-                </div>
-            </div>
-            <div class="col-lg-5">
-                <div class="hero-card">
-                    <h5>Get started today</h5>
-                    <p class="text-muted">Choose how you want to use EventPro.</p>
-                    <a href="{{ url_for('register') }}?role=user" class="role-link"><i class="bi bi-person"></i> I want to book events <i class="bi bi-arrow-right ms-auto"></i></a>
-                    <a href="{{ url_for('login') }}?role=organizer" class="role-link"><i class="bi bi-briefcase"></i> I am an organizer (log in) <i class="bi bi-arrow-right ms-auto"></i></a>
-                    <a href="{{ url_for('login') }}?role=admin" class="role-link"><i class="bi bi-shield-lock"></i> I am an admin <i class="bi bi-arrow-right ms-auto"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<div class="home-page">
 
-<!-- STATS -->
-<section class="stats">
-    <div class="container">
-        <div class="row text-center gy-3">
-            <div class="col-6 col-md-3">
-                <h2>{{ stats.events if stats else 0 }}+</h2>
-                <p>Events managed</p>
-            </div>
-            <div class="col-6 col-md-3">
-                <h2>{{ stats.bookings if stats else 0 }}+</h2>
-                <p>Bookings made</p>
-            </div>
-            <div class="col-6 col-md-3">
-                <h2>{{ stats.users if stats else 0 }}+</h2>
-                <p>Registered users</p>
-            </div>
-            <div class="col-6 col-md-3">
-                <h2>{{ stats.rating if stats else 0 }}/5</h2>
-                <p>Average rating</p>
-            </div>
-        </div>
-    </div>
-</section>
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+        <div class="hero-glow glow-one"></div>
+        <div class="hero-glow glow-two"></div>
 
-<!-- BUILT FOR ANY EVENT -->
-<section class="section">
-    <div class="container">
-        <h2 class="section-title">Built for any event, any size</h2>
-        <p class="section-sub">From small seminars to large concerts, plan and book it all in one place.</p>
-        <div class="row g-4">
-            <div class="col-md-6 col-lg-4">
-                <div class="feature-card">
-                    <i class="bi bi-people"></i>
-                    <h5>Conferences</h5>
-                    <p>Manage speakers, schedules and attendees for professional conferences.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="feature-card">
-                    <i class="bi bi-music-note-beamed"></i>
-                    <h5>Concerts</h5>
-                    <p>Sell tickets and manage seating for music nights and live shows.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="feature-card">
-                    <i class="bi bi-easel"></i>
-                    <h5>Seminars and workshops</h5>
-                    <p>Run training sessions with clear schedules and limited seats.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="feature-card">
-                    <i class="bi bi-shop"></i>
-                    <h5>Exhibitions</h5>
-                    <p>Host expos and trade shows with halls, stalls and packages.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="feature-card">
-                    <i class="bi bi-balloon"></i>
-                    <h5>Festivals</h5>
-                    <p>Organize food, cultural and community festivals at any scale.</p>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="feature-card">
-                    <i class="bi bi-building"></i>
-                    <h5>Hall booking</h5>
-                    <p>Pick from available halls with capacity, charges and time slots.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+        <div class="container hero-container">
+            <div class="hero-content">
+                <span class="hero-badge">
+                    <span class="pulse-dot"></span>
+                    YOUR MOMENT STARTS HERE
+                </span>
 
-<!-- UPCOMING EVENTS -->
-<section class="section bg-soft">
-    <div class="container">
-        <div class="d-flex justify-content-between align-items-end mb-4">
-            <div>
-                <h2 class="section-title mb-1">Upcoming events</h2>
-                <p class="section-sub mb-0">Book your seat before booking closes.</p>
-            </div>
-            <a href="{{ url_for('events') }}" class="btn btn-outline-brand">View all</a>
-        </div>
-        <div class="row g-4">
-            {% for e in events %}
-            <div class="col-md-6 col-lg-4">
-                <div class="event-card">
-                    <div class="event-top">
-                        <span class="badge-type">{{ e.Event_Type }}</span>
+                <h1>
+                    Make moments.<br>
+                    <span>Make memories.</span>
+                </h1>
+
+                <p class="hero-description">
+                    Discover amazing events, connect with people,
+                    and create unforgettable experiences.
+                    Your next favourite moment is waiting.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="{{ url_for('events') }}" class="btn-hero-primary">
+                        Explore Events <i class="bi bi-arrow-up-right"></i>
+                    </a>
+
+                    <a href="{{ url_for('register') }}" class="btn-hero-secondary">
+                        Get Started <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="hero-trust">
+                    <div class="trust-avatars">
+                        <span>🎓</span>
+                        <span>🎵</span>
+                        <span>🎨</span>
                     </div>
-                    <div class="event-body">
-                        <h5>{{ e.Event_Name }}</h5>
-                        <p><i class="bi bi-geo-alt"></i> {{ e.Location }}</p>
-                        <p><i class="bi bi-calendar3"></i> {{ e.Actual_Event_Date }}</p>
-                        <p><i class="bi bi-people"></i> Capacity: {{ e.Max_Capacity }}</p>
-                        <p class="small text-muted">Book before {{ e.Booking_Before_Date }}</p>
-                        <a href="{{ url_for('event_detail', event_id=e.Event_ID) }}" class="btn btn-brand w-100">View details</a>
+                    <p>Discover experiences worth remembering</p>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="hero-image-main">
+                    <img src="https://images.unsplash.com/photo-1506157786151-b8491531f063?auto=format&fit=crop&w=1000&q=85"
+                        alt="Live music event">
+                    <div class="image-overlay"></div>
+
+                    <div class="image-caption">
+                        <span class="caption-label">LIVE THE MOMENT</span>
+                        <h3>Something amazing<br>is happening.</h3>
+                    </div>
+                </div>
+
+                <div class="floating-card floating-top">
+                    <span class="floating-icon">🎉</span>
+                    <div>
+                        <strong>Find your vibe</strong>
+                        <small>Explore something new</small>
+                    </div>
+                </div>
+
+                <div class="floating-card floating-bottom">
+                    <span class="floating-icon">✨</span>
+                    <div>
+                        <strong>Make it memorable</strong>
+                        <small>Your experience matters</small>
                     </div>
                 </div>
             </div>
-            {% else %}
-            <div class="col-12"><p class="text-center text-muted">No upcoming events right now.</p></div>
-            {% endfor %}
         </div>
-    </div>
-</section>
 
-<!-- SERVICES -->
-<section class="section">
-    <div class="container">
-        <h2 class="section-title">Services for your event</h2>
-        <p class="section-sub">Add professional services to make your event smooth.</p>
-        <div class="row g-4">
-            {% for s in services %}
-            <div class="col-6 col-md-4 col-lg-3">
-                <div class="service-card">
-                    <h6>{{ s.Service_Name }}</h6>
-                    <p class="mb-1 text-muted">{{ s.Service_Type }}</p>
-                    <strong>{% if s.Is_Free == 'Yes' %}Free{% else %}&#8377;{{ s.Service_Cost }}{% endif %}</strong>
+        <div class="hero-bottom-text">EXPERIENCES • PEOPLE • MEMORIES</div>
+    </section>
+
+
+    <!-- STATS -->
+    <section class="stats-section">
+        <div class="container stats-grid">
+            <div class="stat-item">
+                <span class="stat-number">{{ stats.events if stats else '∞' }}</span>
+                <span class="stat-label">Events to explore</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">{{ stats.bookings if stats else '∞' }}</span>
+                <span class="stat-label">Bookings made</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">{{ stats.users if stats else '∞' }}</span>
+                <span class="stat-label">Community members</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Memorable moments</span>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- CATEGORIES -->
+    <section class="categories-section section-space">
+        <div class="container">
+            <div class="section-heading">
+                <div>
+                    <span class="section-kicker">FIND YOUR INTEREST</span>
+                    <h2>Explore by <span>category.</span></h2>
+                    <p>Whatever you're into, there's an experience for you.</p>
+                </div>
+                <a href="{{ url_for('events') }}" class="text-link">
+                    View all events <i class="bi bi-arrow-up-right"></i>
+                </a>
+            </div>
+
+            <div class="category-grid">
+                <a href="{{ url_for('events') }}" class="category-card category-purple">
+                    <span class="category-emoji">🎵</span>
+                    <h3>Music</h3>
+                    <span>Feel the rhythm <i class="bi bi-arrow-up-right"></i></span>
+                </a>
+
+                <a href="{{ url_for('events') }}" class="category-card category-orange">
+                    <span class="category-emoji">🎨</span>
+                    <h3>Art & Culture</h3>
+                    <span>Explore creativity <i class="bi bi-arrow-up-right"></i></span>
+                </a>
+
+                <a href="{{ url_for('events') }}" class="category-card category-blue">
+                    <span class="category-emoji">💻</span>
+                    <h3>Technology</h3>
+                    <span>Think beyond <i class="bi bi-arrow-up-right"></i></span>
+                </a>
+
+                <a href="{{ url_for('events') }}" class="category-card category-pink">
+                    <span class="category-emoji">🎓</span>
+                    <h3>Education</h3>
+                    <span>Learn something new <i class="bi bi-arrow-up-right"></i></span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- FEATURED EVENTS -->
+    <section class="events-section section-space">
+        <div class="container">
+            <div class="section-heading">
+                <div>
+                    <span class="section-kicker">DON'T MISS OUT</span>
+                    <h2>Events worth <span>showing up for.</span></h2>
+                    <p>Find your next experience and make it count.</p>
+                </div>
+                <a href="{{ url_for('events') }}" class="text-link">
+                    All events <i class="bi bi-arrow-up-right"></i>
+                </a>
+            </div>
+
+            <div class="row g-4">
+                {% for event in events %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="event-card-modern">
+
+                        <div class="event-image">
+                            {% if event.image %}
+                            <img src="{{ url_for('static', filename='uploads/' ~ event.image) }}"
+                                alt="{{ event.title }}">
+                            {% else %}
+                            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80"
+                                alt="Event">
+                            {% endif %}
+
+                            <span class="event-category">
+                                {{ event.category if event.category else 'EVENT' }}
+                            </span>
+                        </div>
+
+                        <div class="event-card-content">
+                            <h3>{{ event.title }}</h3>
+
+                            <div class="event-meta">
+                                <span><i class="bi bi-calendar-event"></i> {{ event.date }}</span>
+                                <span><i class="bi bi-geo-alt"></i> {{ event.location }}</span>
+                            </div>
+
+                            <div class="event-card-footer">
+                                <span class="event-price">
+                                    {% if event.price == 0 %}FREE{% else %}₹{{ event.price }}{% endif %}
+                                </span>
+
+                                <a href="{{ url_for('event_detail', event_id=event.id) }}" class="event-view-btn">
+                                    View Event <i class="bi bi-arrow-up-right"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                {% else %}
+                <div class="col-12">
+                    <div class="empty-events">
+                        <div class="empty-icon">🎟️</div>
+                        <h3>Your next experience is coming!</h3>
+                        <p>There are no events available right now. Check back soon.</p>
+                        <a href="{{ url_for('events') }}" class="btn-hero-primary">
+                            Explore Events <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+
+    <!-- SERVICES -->
+    <section class="services-section section-space">
+        <div class="container">
+            <div class="section-heading">
+                <div>
+                    <span class="section-kicker">WHY EVENTPRO</span>
+                    <h2>Everything you need.<br><span>One platform.</span></h2>
+                    <p>From discovering an event to managing your bookings.</p>
                 </div>
             </div>
-            {% else %}
-            <div class="col-12"><p class="text-center text-muted">Services will be listed here.</p></div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
 
-<!-- HOW IT WORKS -->
-<section class="section bg-soft">
-    <div class="container">
-        <h2 class="section-title">How it works</h2>
-        <div class="row g-4 text-center mt-2">
-            <div class="col-md-3">
-                <div class="step"><span>1</span><h6>Register</h6><p>Create a user or organizer account.</p></div>
-            </div>
-            <div class="col-md-3">
-                <div class="step"><span>2</span><h6>Choose an event</h6><p>Browse events, schedules and packages.</p></div>
-            </div>
-            <div class="col-md-3">
-                <div class="step"><span>3</span><h6>Book and pay</h6><p>Apply an offer code, pick a hall and pay.</p></div>
-            </div>
-            <div class="col-md-3">
-                <div class="step"><span>4</span><h6>Attend and review</h6><p>Enjoy the event and share your feedback.</p></div>
+            <div class="row g-4">
+                {% for service in services %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-card-modern">
+                        <div class="service-icon">✦</div>
+                        <h3>{{ service.title }}</h3>
+                        <p>{{ service.description }}</p>
+                    </div>
+                </div>
+                {% else %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-card-modern">
+                        <div class="service-icon">🔎</div>
+                        <h3>Discover Events</h3>
+                        <p>Find exciting events and experiences that match your interests.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-card-modern">
+                        <div class="service-icon">🎟️</div>
+                        <h3>Easy Booking</h3>
+                        <p>Book your favourite events with a simple and smooth process.</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="service-card-modern">
+                        <div class="service-icon">📅</div>
+                        <h3>Manage Bookings</h3>
+                        <p>Keep track of your event bookings in one convenient place.</p>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- FEEDBACK -->
-<section class="section">
-    <div class="container">
-        <h2 class="section-title">What our users say</h2>
-        <div class="row g-4">
-            {% for f in feedbacks %}
-            <div class="col-md-4">
-                <div class="story-card">
-                    <h5>{{ f.User_Name }}</h5>
-                    <p class="text-muted">{{ f.Event_Name }}</p>
-                    <p class="stars">{% for i in range(f.Rating) %}&#9733;{% endfor %}{% for i in range(5 - f.Rating) %}&#9734;{% endfor %}</p>
-                    <p>{{ f.Comments }}</p>
+
+    <!-- HOW IT WORKS -->
+    <section class="steps-section section-space">
+        <div class="container">
+            <div class="section-heading centered-heading">
+                <div>
+                    <span class="section-kicker">SIMPLE AS THAT</span>
+                    <h2>Your next adventure in <span>3 steps.</span></h2>
+                    <p>Getting started has never been easier.</p>
                 </div>
             </div>
-            {% else %}
-            <div class="col-12"><p class="text-center text-muted">No feedback yet.</p></div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
 
-<!-- CTA -->
-<section class="cta">
-    <div class="container text-center">
-        <h2>Ready to plan your next event?</h2>
-        <p>Join EventPro and manage everything from one dashboard.</p>
-        <a href="{{ url_for('register') }}" class="btn btn-light btn-lg">Get started free</a>
-    </div>
-</section>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <span class="step-number">01</span>
+                    <div class="step-icon">🔍</div>
+                    <h3>Discover</h3>
+                    <p>Browse events and find something you love.</p>
+                </div>
+
+                <div class="step-card">
+                    <span class="step-number">02</span>
+                    <div class="step-icon">🎫</div>
+                    <h3>Book</h3>
+                    <p>Choose your event and reserve your spot.</p>
+                </div>
+
+                <div class="step-card">
+                    <span class="step-number">03</span>
+                    <div class="step-icon">🥳</div>
+                    <h3>Experience</h3>
+                    <p>Show up, enjoy and create memories.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- REVIEWS -->
+    {% if feedbacks %}
+    <section class="reviews-section section-space">
+        <div class="container">
+            <div class="section-heading">
+                <div>
+                    <span class="section-kicker">COMMUNITY LOVE</span>
+                    <h2>Good times. <span>Great stories.</span></h2>
+                    <p>Experiences shared by our community.</p>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                {% for feedback in feedbacks %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="review-card-modern">
+                        <div class="review-stars">★★★★★</div>
+                        <p>"{{ feedback.comment }}"</p>
+                        <div class="review-author">
+                            <div class="review-avatar">✦</div>
+                            <strong>{{ feedback.name }}</strong>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+
+    <!-- FINAL CTA -->
+    <section class="final-cta-section">
+        <div class="container">
+            <div class="final-cta-content">
+                <span class="section-kicker">YOUR STORY STARTS NOW</span>
+                <h2>Don't just scroll.<br><span>Go experience.</span></h2>
+                <p>Discover something new. Meet amazing people. Make memories.</p>
+
+                <a href="{{ url_for('events') }}" class="btn-cta">
+                    Find Your Next Event <i class="bi bi-arrow-up-right"></i>
+                </a>
+            </div>
+            <div class="cta-decoration">✦</div>
+        </div>
+    </section>
+
+</div>
 
 {% endblock %}
